@@ -4,14 +4,29 @@ import React,{useEffect,useState} from 'react'
 function App() {
   const [users,setUsers]=useState([])
   useEffect(()=>{
+    getList()
+  },[])
+  console.log(users);
+  function getList()
+  {
     fetch("https://jsonplaceholder.typicode.com/users").then((result)=>{
       result.json().then((resp)=>{
         // console.warn("result",resp);
         setUsers(resp)
       })
     })
-  },[])
-  console.log(users);
+  }
+  function deleteUser(id)
+  {
+    fetch(`https://jsonplaceholder.typicode.com/users${id}`,{
+      method:'DELETE'
+    }).then((result)=>{
+      result.json().then((resp)=>{
+        console.warn(resp);
+        getList()
+      })
+    })
+  }
   return(
     <div className="App">
       <h1>Get API Call</h1>
@@ -32,6 +47,7 @@ function App() {
               <td>{users[i].username}</td>
               <td>{users[i].email}</td>
               <td>{users[i].phone}</td>
+              <td><button onClick={()=>deleteUser(item.id)}>Delete</button></td>
             </tr>
             )
           }
