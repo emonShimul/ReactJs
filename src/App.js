@@ -1,53 +1,45 @@
 import './App.css';
-import React from 'react'
-import {BrowserRouter as Router, Link, Route, Switch} from 'react-router-dom'
+import React,{useEffect,useState} from 'react'
 
 function App() {
-    return(
-      <div className="App">
-          <Router>
-            <Link to="/">Home</Link> <br/>
-            <Link to="/about">About</Link> <br/>
-            <Link to="/login">Login</Link> <br/>
-            <Switch>
-              <Route path="/" exact={true}><Home/></Route>
-              <Route path="/about"><About/></Route>
-
-              <Route path="*"><PageNotFound/></Route>
-            </Switch>
-          </Router>
-      </div>
-    );
-}
-
-function Home()
-{
+  const [users,setUsers]=useState([])
+  useEffect(()=>{
+    fetch("https://jsonplaceholder.typicode.com/users").then((result)=>{
+      result.json().then((resp)=>{
+        // console.warn("result",resp);
+        setUsers(resp)
+      })
+    })
+  },[])
+  console.log(users);
   return(
-    <div>
-      <h1>Home Page</h1>
-      <p>This is Home Page</p>
+    <div className="App">
+      <h1>Get API Call</h1>
+      <table border="1">
+        <tbody>
+          <tr>
+            <td>Id</td>
+            <td>Name</td>
+            <td>Username</td>
+            <td>Email</td>
+            <td>Phone</td>
+          </tr>
+          {
+            users.map((item,i)=>
+            <tr key={i}>
+              <td>{users[i].id}</td>
+              <td>{users[i].name}</td>
+              <td>{users[i].username}</td>
+              <td>{users[i].email}</td>
+              <td>{users[i].phone}</td>
+            </tr>
+            )
+          }
+        </tbody>
+      </table>
     </div>
-  )
+  );
 }
 
-function About()
-{
-  return(
-    <div>
-      <h1>About Page</h1>
-      <p>This is About Page</p>
-    </div>
-  )
-}
-
-function PageNotFound()
-{
-  return(
-    <div>
-      <h1>404 Page</h1>
-      <p>This Page is Not Found</p>
-    </div>
-  )
-}
 
 export default App;
