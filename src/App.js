@@ -3,6 +3,10 @@ import React,{useEffect,useState} from 'react'
 
 function App() {
   const [users,setUsers]=useState([])
+  const [name,setName]=useState("")
+  const [username,setUsername]=useState("")
+  const [email,setEmail]=useState("")
+  const [phone,setPhone]=useState("")
   useEffect(()=>{
     getList()
   },[])
@@ -13,6 +17,10 @@ function App() {
       result.json().then((resp)=>{
         // console.warn("result",resp);
         setUsers(resp)
+        setName(resp[0].name)
+        setUsername(resp[0].username)
+        setEmail(resp[0].email)
+        setPhone(resp[0].phone)
       })
     })
   }
@@ -26,6 +34,16 @@ function App() {
         getList()
       })
     })
+  }
+
+  function selectUser(id)
+  {
+    console.warn(users[id-1]);
+    let item = users[id-1];
+    setName(item.name);
+    setUsername(item.username);
+    setEmail(item.email);
+    setPhone(item.phone);
   }
   return(
     <div className="App">
@@ -48,12 +66,22 @@ function App() {
               <td>{users[i].email}</td>
               <td>{users[i].phone}</td>
               <td><button onClick={()=>deleteUser(item.id)}>Delete</button></td>
+              <td><button onClick={()=>selectUser(item.id)}>Update</button></td>
             </tr>
             )
           }
         </tbody>
       </table>
+
+      <div>
+          <input type="text" value={name}/> <br/> <br/>
+          <input type="text" value={username}/> <br/> <br/>
+          <input type="text" value={email}/> <br/> <br/>
+          <input type="text" value={phone}/> <br/> <br/>
+          <button>Update User</button>
+        </div>
     </div>
+    
   );
 }
 
