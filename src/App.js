@@ -1,13 +1,17 @@
 import './App.css';
-import React,{useEffect,useState} from 'react'
-import User from "./User"
+import React,{useState} from 'react'
 
 function App() {
-  const[count, setCount] = useState(0);
+  const[data, setData] = React.useState({name:'Emon',age:28});
   return(
     <div className="App">
-      <User count={count}/>
-      <button onClick={()=>setCount(Math.floor(Math.random()*10))}>Update Counter</button>
+      <h1>State Object with Hooks</h1>
+      <input type="text" placeholder="Enter Name:" value={data.name}
+       onChange={(e)=>{setData({...data,name:e.target.value})}} />
+      <input type="text" placeholder="Enter Age:" value={data.age}
+       onChange={(e)=>{setData({...data,age:e.target.value})}} />
+      <h1>{data.name}</h1>
+      <h1>{data.age}</h1>
     </div>
   );
 }
