@@ -7,10 +7,12 @@ function App() {
   const [username,setUsername]=useState("")
   const [email,setEmail]=useState("")
   const [phone,setPhone]=useState("")
+  const [id,setId]=useState(null)
+
   useEffect(()=>{
     getList()
   },[])
-  console.log(users);
+  // console.log(users);
   function getList()
   {
     fetch("https://jsonplaceholder.typicode.com/users").then((result)=>{
@@ -21,6 +23,7 @@ function App() {
         setUsername(resp[0].username)
         setEmail(resp[0].email)
         setPhone(resp[0].phone)
+        setId(resp[0].id)
       })
     })
   }
@@ -38,12 +41,31 @@ function App() {
 
   function selectUser(id)
   {
-    console.warn(users[id-1]);
+    // console.warn(users[id-1]);
     let item = users[id-1];
     setName(item.name);
     setUsername(item.username);
     setEmail(item.email);
     setPhone(item.phone);
+    setId(item.id);
+  }
+
+  function updateUser(){
+    console.warn(name, username, email, phone, id);
+    let item = {name, username, email, phone, id}
+    fetch(`https://jsonplaceholder.typicode.com/users${id}`,{
+      method:'PUT',
+      headers:{
+        'Accept':'application/json',
+        'Content-Type':'application/json'
+      },
+      body:JSON.stringify(item)
+    }).then((result)=>{
+      result.json().then((resp)=>{
+        console.warn(resp);
+        getList()
+      })
+    })
   }
   return(
     <div className="App">
@@ -74,11 +96,11 @@ function App() {
       </table>
 
       <div>
-          <input type="text" value={name}/> <br/> <br/>
-          <input type="text" value={username}/> <br/> <br/>
-          <input type="text" value={email}/> <br/> <br/>
-          <input type="text" value={phone}/> <br/> <br/>
-          <button>Update User</button>
+          <input type="text" value={name} onChange={(e)=>setName(e.target.value)}/> <br/> <br/>
+          <input type="text" value={username} onChange={(e)=>setUsername(e.target.value)}/> <br/> <br/>
+          <input type="text" value={email} onChange={(e)=>setEmail(e.target.value)}/> <br/> <br/>
+          <input type="text" value={phone} onChange={(e)=>setPhone(e.target.value)}/> <br/> <br/>
+          <button onClick={updateUser}>Update User</button>
         </div>
     </div>
     
